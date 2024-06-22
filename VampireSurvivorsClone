@@ -1,0 +1,319 @@
+player upgrades:
+	attacks:
+		- close combat
+		- ranged
+		- area 
+
+understanding signals:
+
+Enemy:
+- hurtbox // receive damage or healing upon collision with another hurtbox 
+	// Examples
+	
+	1) player attacks enemy
+		- attack_hitbox -> enemy_hurtbox 
+			- enemy receives damage 
+	2) player walks into enemy
+		- enemy_hitbox -> player_hurtbox 
+			- player receives damage 
+	4) enemy attacks player
+		- enemy_attack_hitbox -> player_hurtbox 
+			- player receives damage 
+		
+- hitbox // send damage or healing upon collision with another hurtbox 
+
+
+
+Features:
+[X] player walk into enemy, player takes damage 
+	player_hurt_box -> enemy_hit_box 
+		- player takes damage 
+		[x] player hurtbox temporarily disappears after taking damage
+				- iframes 
+[X] enemy moves toward player 
+[x] shoot projectiles
+[x] remove enemy upon death // health goes to 0
+[] combat attack
+	[] 
+[] flip character based on horizontal face direction 
+[] set up a simple upgrade gui 
+
+
+What makes a game fun?
+fun:
+- incentives 
+	- game instills player curiosity
+	- game instils player to challenge themselves 
+	- game rewards player for their efforts 	
+		- different approaches to gameplay 
+
+=============
+Features to get done:
+
+Testing:
+[] test enemy detection
+[] test player level up 
+
+
+
+============ 06 - 1 - 2024 =============
+
+what I have/have not accomplished already:
+
+Player Scene:
+x simple upgrade database 
+x create handler for changes to player transform2D
+	- player can flip horizontally 
+x enemy detection
+x undetect enemy  
+x user input 
+x basic movement
+x experience gain 
+  	 x test function
+  	  x detect gems within collection area 
+  	  	x when detected:
+  	  			// a future feature 
+  	  		  have gem move towards player
+  	  		  	if hits player:
+  	  				x delete gem
+x take damage 
+x ability cooldown 
+x level up ability
+
+enemy spawning
+x player takes damage
+	x upon collision, disable hurtbox, re-enable after X number of seconds 
+	
+- enemy takes damage 
+- enemy is removed from game when dies 
+
+
+
+backlog:
+  update ability behavior/attributes based on current ability level 
+  detected item moved towards player 
+  customize your germ 
+
+====
+06 - 2 - 2024 
+
+[] have gem move to player when within item collection range (or not)
+[] add more abilities to test level up and acquire different attacks 
+[] imlement the enemy spawner
+	[x] basic spawner implemented
+	 [] implement enemy waves?
+[x] implement varying behaviors of abilities based on their level 
+[] do we want items ? 
+[] implement passive abilities 
+	- going to have to refactor some code 
+	[] add debuff abilities? 
+ 
+[] destructible environments
+[] 
+
+
+
+======
+how can i make a slightly better product than vampire survivors????
+	better controls?
+	better progression? 
+	mini bosses?
+	better items?
+	better aesthetics??
+	what does it mean to be an invading germ inside a human body?
+	what does it mean to even make a game fun? 
+	how do you make grinding fun?
+	- iterative progression??
+	capture points???
+	
+	
+	3 pillars:
+	incentives
+	curiosity
+	rewards
+	
+	why is vampire survivors addicting?
+	
+	how can evolution be addicting?
+	
+	each level is a next stage in evolution???
+	
+	environmental interactions???
+	
+	why slot machines???
+	
+	how can we make "slot machine" gameplay fun???
+	
+	- game gives you random abilities 
+	- can gamble for stronger abilities if you have currency 
+	
+	
+	game is about working with what you are given and then taking a chance to possibly rise in life or just fall 
+	
+	
+	
+	
+designs we need to figure out:
+
+[]   enemy design 
+
+[ ] progreession system 
+
+
+[ ] level design 
+
+[ ] 
+	abilities must be sorted in tiers:
+	
+			
+	
+	
+	tier 1: 70%  chance to obtain 
+		- melee attack
+		- ranged attack
+		- area attack 
+		- 
+	tier 2: 25% chance to obtain
+	
+	tier 3: 5% chance to obtain 
+	
+	
+what kind of game do we want?
+- vampire survivors game where obtaining items and abiliities if completely random:
+	- spend collected currency(not actual cash) to have a chance at obtain a stronger ability
+	
+
+what am i trying to do now?? 
+- lets code a bunch of abilities the player can use??? 
+
+
+Randomized Vampire Survivors Clone:
+
+what does it mean?
+- in-game abilities will be seperated by tiers:
+	tier 1
+		- basic automated easy to use abilities
+		
+		 
+	tier 2
+		- stronger 
+	tier 3
+		- 
+=================================================
+
+
+Vampire Survivors Clone:
+
+game features:
+
+data base of abilities:
+
+ranged_combat
+close_combat
+area_combat 
+
+how do i want to design my game?
+- very basic template game 
+
+[] level up player
+[] player can gain exp 
+[] select ability from upgrade menu 
+[] player can level up ability
+
+
+
+ability upgrade feature:
+player levels -> open upgrade menu -> show upgrade selection
+player selects an upgrade:
+	- upgrade ability level 
+	- 
+
+
+===================
+
+Vampire Survivors Clone:
+[x] basic player movement 
+[x] player takes damage when colliding into enemy 
+[x] player colides into gem and gains exp
+[x] player levels up 
+[] knock back 
+[] check if projectile area2D is only hitting ONE area2D unless is explosive or is melee attack 
+[] make attacking slime 
+[] make slime that upon death, creates a death puddle for a temporary amount of seconds 
+[] make slime that can shoot projectiles
+[] make big boss slime that makes other slimes
+	[] add some attack behaviors (without using an attack animation ) 
+	 
+
+
+Necessities needed for an MVP:
+
+(need to consider player experience and how they want your game to feel for the foreseeable future) 
+
+[] game pacing
+	- we can never speed up the early game process but we can make sure it never feels sluggish to restart 
+		- player can start with a special item and a default weapon (similar to slay the spire. might just copy the starting options of slay the spire )
+		- (later down the line) player can pick a room to survive through 
+		- player levels up, selects skills, and persists those upgrades throughout the game stages
+			- this allows player to focus solely on the player's survivability  
+		note: types of game pacings:
+			- timed levels/floors <--- i think i like this more than "survive for 1000000 hours" (adds progression) 
+				- each floor gets more harder 
+				- enemy variety differs as the levels progress
+ 
+[] gameplay accesibility
+	- player should be able to experiment with different gameplay approaches to achieve the game's goal
+	- given the tools from the developer, the player has to figure out which game play approach is optimal	
+	- game is challenging enough to incentivize players to come back and revise their gameplay 
+Features:
+
+
+Want to build an MVP:
+
+
+marketing appraoches:
+[] who is my audience?? 
+
+
+core concept of game:
+- horde survival vampire survivor clone or roguelike 
+- play as different demon clases:
+	 werewolf(druid) <- focus on this for now 
+	 	- toolkit:
+	 		melee 
+	 		- 80% melee skills 
+	 		- 10% ranged skills 
+	 		- 10% defense skills 
+	 vampire(paladin)
+	 	- toolkit:
+	 		melee and ranged
+	 		- 40% melee skills
+	 		- 40% ranged skills
+	 		- 20% defense skills 
+	 cthulu (necromancer)
+	 	- toolkit:
+	 		ranged
+	 	
+	 litch (sorcerer)
+	 succubus (assassin)
+	 some forest god (amazon)  
+	 
+- survive the forces of god
+- how can i differentiate this from vampire survivors???
+	- how about timed floors that get harder 
+- is this 2D or 3D? (currently 2D but woudl like to move to 3D eventually) 
+
+
+
+basic player features:
+[] player can move (note: current it is 4 directional. can make it 8 directional later) 
+[] player can receive damage(note: anything that can interact with player's hurtbox) 
+[] player can level up
+[] player can select abilities upon level up(note: an "ability" represents an item or a skill) 
+[] player can upgrade abilities
+[] player can collect dropped exp gems 
+[] player has animations 
+[] 
+
+
+
