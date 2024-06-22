@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://vgrxx6swr0ie"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/Gem.gd" id="1_mynl3"]
+[ext_resource type="Texture2D" uid="uid://cc628wytub2qb" path="res://SlimeBlue_Attack1.png" id="2_u3qbq"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sjdmj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_u3qbq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lydrx"]
+size = Vector2(16, 13)
+
+[node name="Gem" type="Area2D"]
+position = Vector2(0, -7)
+collision_layer = 64
+collision_mask = 128
+script = ExtResource("1_mynl3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-1, -15)
+sprite_frames = SubResource("SpriteFrames_sjdmj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_lydrx")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://bvvb74rl4gq35"]
+
+[node name="TestEnemySpawner" type="CharacterBody2D"]

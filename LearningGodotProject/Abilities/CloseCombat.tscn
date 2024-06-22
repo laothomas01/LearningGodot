@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbag5jm2psl0b"]
+
+[ext_resource type="Script" path="res://Abilities/CloseCombat.gd" id="1_krq0v"]
+
+[node name="CloseCombat" type="Node2D"]
+script = ExtResource("1_krq0v")

@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://5ymyasuqnyu3"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/Projectile.gd" id="1_3f8sc"]
+[ext_resource type="Texture2D" uid="uid://cxwlsiyte86o5" path="res://Bubbles/Coloured/16x16/bubble_1.png" id="2_tlff1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rtph7"]
+radius = 8.24621
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t1nkq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tlff1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Projectile" type="Area2D"]
+top_level = true
+collision_layer = 4
+collision_mask = 8
+collision_priority = 300000.0
+script = ExtResource("1_3f8sc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_rtph7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_t1nkq")
+
+[node name="Lifespan" type="Timer" parent="."]
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

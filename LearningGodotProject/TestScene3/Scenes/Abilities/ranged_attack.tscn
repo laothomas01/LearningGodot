@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjk1jsfuwlx4q"]
+
+[ext_resource type="Script" path="res://TestScene3/Scripts/RangedAttack.gd" id="1_ti541"]
+
+[node name="RangedAttack" type="Node2D"]
+script = ExtResource("1_ti541")
+
+[node name="RangedAttackTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[connection signal="timeout" from="RangedAttackTimer" to="." method="_on_ranged_attack_timer_timeout"]

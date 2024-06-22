@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvh4xhld3e32q"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/Main.gd" id="1_wkj2f"]
+[ext_resource type="PackedScene" uid="uid://dbx1sdd4dfuh8" path="res://TestScene3/Scenes/Player.tscn" id="2_dsjtf"]
+[ext_resource type="PackedScene" uid="uid://iut3mcwy8mi5" path="res://TestScene3/Scenes/Enemies/Enemy5.tscn" id="2_qecq5"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_wkj2f")
+
+[node name="Player" parent="." instance=ExtResource("2_dsjtf")]
+process_mode = 1
+position = Vector2(340, 147)
+move_speed = 5000
+
+[node name="Enemy5" parent="." instance=ExtResource("2_qecq5")]

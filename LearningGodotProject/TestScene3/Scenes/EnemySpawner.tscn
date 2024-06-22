@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://drofyf4jsr665"]
+
+[ext_resource type="Script" path="res://TestScene3/Scripts/EnemySpawner.gd" id="1_1bnbo"]
+
+[node name="EnemySpawner" type="Node2D"]
+script = ExtResource("1_1bnbo")
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]
+
+[node name="NewWaveTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_time_timeout"]
+[connection signal="timeout" from="NewWaveTimer" to="." method="_on_new_wave_timer_timeout"]

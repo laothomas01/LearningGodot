@@ -1,0 +1,69 @@
+[gd_scene load_steps=9 format=3 uid="uid://vixag53nke1g"]
+
+[ext_resource type="Script" path="res://TestScenes/TestEnemy.gd" id="1_im214"]
+[ext_resource type="Texture2D" uid="uid://cc628wytub2qb" path="res://SlimeBlue_Attack1.png" id="1_l5pc1"]
+[ext_resource type="Script" path="res://TestScenes/Hurtbox.gd" id="3_ofh4h"]
+[ext_resource type="Script" path="res://TestScenes/Hitbox.gd" id="4_h6oew"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vyter"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_l5pc1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bmag7"]
+radius = 3.0
+height = 10.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gs8pt"]
+size = Vector2(14, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1xxob"]
+size = Vector2(10, 10)
+
+[node name="TestEnemy" type="CharacterBody2D"]
+collision_layer = 64
+collision_mask = 0
+script = ExtResource("1_im214")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vyter")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 15)
+shape = SubResource("CapsuleShape2D_bmag7")
+debug_color = Color(0, 0.6, 0.7, 0.42)
+
+[node name="HurtBox" type="Area2D" parent="."]
+position = Vector2(0, 13)
+collision_layer = 8
+collision_mask = 32
+script = ExtResource("3_ofh4h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(1, 2)
+shape = SubResource("RectangleShape2D_gs8pt")
+
+[node name="DisableTimer" type="Timer" parent="HurtBox"]
+
+[node name="CollisionHitBox" type="Area2D" parent="."]
+position = Vector2(0, 13)
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("4_h6oew")
+damage = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionHitBox"]
+position = Vector2(1, 2)
+shape = SubResource("RectangleShape2D_1xxob")
+
+[node name="DisableTimer" type="Timer" parent="CollisionHitBox"]
+
+[connection signal="area_entered" from="HurtBox" to="HurtBox" method="_on_area_entered"]
+[connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
+[connection signal="timeout" from="HurtBox/DisableTimer" to="HurtBox" method="_on_disable_timer_timeout"]

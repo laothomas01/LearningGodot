@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://iqkqp8dhrmol"]
+
+[ext_resource type="Texture2D" uid="uid://ddqosy5xujnm7" path="res://Icon.svg" id="1_tyvwu"]
+[ext_resource type="Script" path="res://TestScene2/TestPlayer.gd" id="1_wopkl"]
+[ext_resource type="Script" path="res://TestScene2/HurtBox.gd" id="3_y2y1x"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1q331"]
+size = Vector2(128, 127)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rbbkv"]
+size = Vector2(129, 127)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6lafd"]
+radius = 298.429
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1tfb1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_tyvwu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="TestPlayer" type="CharacterBody2D"]
+position = Vector2(255, 320)
+scale = Vector2(0.5, 0.5)
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_wopkl")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="CollisionBox" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_1q331")
+
+[node name="HurtBox" type="Area2D" parent="."]
+visible = false
+collision_layer = 2
+collision_mask = 16
+script = ExtResource("3_y2y1x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_rbbkv")
+
+[node name="DisableTimer" type="Timer" parent="HurtBox"]
+wait_time = 2.0
+
+[node name="DetectionArea" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_6lafd")
+
+[node name="Attack" type="Node2D" parent="."]
+visible = false
+
+[node name="RangeAttackTimer" type="Timer" parent="Attack"]
+wait_time = 0.125
+
+[node name="CloseAttackTimer" type="Timer" parent="Attack"]
+
+[node name="TransformAdjustment2D" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TransformAdjustment2D"]
+sprite_frames = SubResource("SpriteFrames_1tfb1")
+
+[connection signal="area_entered" from="HurtBox" to="HurtBox" method="_on_area_entered"]
+[connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
+[connection signal="timeout" from="HurtBox/DisableTimer" to="HurtBox" method="_on_disable_timer_timeout"]
+[connection signal="area_entered" from="DetectionArea" to="." method="_on_detection_area_area_entered"]
+[connection signal="area_exited" from="DetectionArea" to="." method="_on_detection_area_area_exited"]
+[connection signal="timeout" from="Attack/RangeAttackTimer" to="." method="_on_range_attack_timer_timeout"]
+[connection signal="timeout" from="Attack/CloseAttackTimer" to="." method="_on_close_attack_timer_timeout"]

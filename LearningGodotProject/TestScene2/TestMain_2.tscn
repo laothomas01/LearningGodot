@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbq0xftpr4pqv"]
+
+[ext_resource type="PackedScene" uid="uid://iqkqp8dhrmol" path="res://TestScene2/TestPlayer.tscn" id="1_fby3q"]
+[ext_resource type="PackedScene" uid="uid://bfl8i0jrkvys5" path="res://TestScene2/Enemy_Spawner.tscn" id="3_y2jh0"]
+
+[node name="TestMain_2" type="Node2D"]
+
+[node name="TestPlayer" parent="." groups=["character"] instance=ExtResource("1_fby3q")]
+
+[node name="EnemySpawner" parent="." instance=ExtResource("3_y2jh0")]

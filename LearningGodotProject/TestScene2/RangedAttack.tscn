@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://v56j50vn1b7"]
+
+[ext_resource type="Texture2D" uid="uid://cxwlsiyte86o5" path="res://Bubbles/Coloured/16x16/bubble_1.png" id="1_q5un7"]
+[ext_resource type="Script" path="res://TestScene2/RangedAttack.gd" id="1_wujnh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xshwu"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kpwsv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_q5un7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="RangedAttack" type="Area2D"]
+top_level = true
+light_mask = 0
+visibility_layer = 0
+collision_layer = 4
+collision_mask = 8
+script = ExtResource("1_wujnh")
+moveSpeed = 100
+
+[node name="Lifespan" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_xshwu")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_kpwsv")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="timeout" from="Lifespan" to="." method="_on_lifespan_timeout"]

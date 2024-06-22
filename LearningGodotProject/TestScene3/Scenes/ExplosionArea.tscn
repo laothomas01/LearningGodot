@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://df0emxtxkruqt"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/ExplosionArea.gd" id="1_vt3sy"]
+[ext_resource type="Texture2D" uid="uid://ddqosy5xujnm7" path="res://Icon.svg" id="2_1rejk"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lnhry"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_1rejk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4mnve"]
+radius = 95.1893
+
+[node name="ExplosionArea" type="Area2D"]
+top_level = true
+scale = Vector2(0.5, 0.5)
+collision_layer = 4
+collision_mask = 8
+script = ExtResource("1_vt3sy")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_lnhry")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_4mnve")
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,0 +1,84 @@
+[gd_scene load_steps=8 format=3 uid="uid://bv5nffunb3sum"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_wfd6d"]
+[ext_resource type="Texture2D" uid="uid://c3n8jeou4d1oa" path="res://dodge_the_creeps_2d_assets/art/playerGrey_walk1.png" id="2_hspgp"]
+[ext_resource type="Texture2D" uid="uid://dqqel8xlquovp" path="res://dodge_the_creeps_2d_assets/art/playerGrey_walk2.png" id="3_f45wt"]
+[ext_resource type="Script" path="res://hurtbox.gd" id="4_4wjvq"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x6edl"]
+radius = 58.0
+height = 140.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ylr2d"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_hspgp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_f45wt")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1yrg5"]
+size = Vector2(54.5, 104.5)
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_wfd6d")
+moveSpeed = 100
+rotationSpeed = 100
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_x6edl")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ylr2d")
+animation = &"walk"
+frame_progress = 0.647411
+
+[node name="RangedAttackTimer" type="Timer" parent="."]
+
+[node name="GuiLayer" type="CanvasLayer" parent="."]
+
+[node name="GUI" type="Control" parent="GuiLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LevelUpPanel" type="Panel" parent="GuiLayer/GUI"]
+layout_mode = 0
+offset_left = 790.0
+offset_top = 61.0
+offset_right = 1010.0
+offset_bottom = 311.0
+
+[node name="LevelUpLabel" type="Label" parent="GuiLayer/GUI/LevelUpPanel"]
+layout_mode = 0
+offset_right = 220.0
+offset_bottom = 31.0
+text = "Level Up"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GuiLayer/GUI/LevelUpPanel"]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 0
+offset_left = 9.5
+offset_right = 209.5
+offset_bottom = 60.0
+
+[node name="HurtBox" type="Area2D" parent="."]
+script = ExtResource("4_4wjvq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(8.75, -12.75)
+shape = SubResource("RectangleShape2D_1yrg5")
+
+[connection signal="timeout" from="RangedAttackTimer" to="." method="_on_ranged_attack_timer_timeout"]
+[connection signal="area_entered" from="HurtBox" to="HurtBox" method="_on_area_entered"]
+[connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]

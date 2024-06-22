@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://ka56473ei6tv"]
+
+[ext_resource type="PackedScene" uid="uid://63gs6mnaucdu" path="res://TestScenes/TestPlayer.tscn" id="1_67qwq"]
+[ext_resource type="PackedScene" uid="uid://vixag53nke1g" path="res://TestScenes/TestEnemy.tscn" id="2_doa4n"]
+
+[node name="TestMain" type="Node2D"]
+
+[node name="TestPlayer" parent="." instance=ExtResource("1_67qwq")]
+position = Vector2(252, 384)
+
+[node name="TestEnemy" parent="." instance=ExtResource("2_doa4n")]
+position = Vector2(78, 79)
+
+[node name="TestEnemy4" parent="." instance=ExtResource("2_doa4n")]
+position = Vector2(36, 298)
+
+[node name="TestEnemy2" parent="." instance=ExtResource("2_doa4n")]
+position = Vector2(276, 52)
+
+[node name="TestEnemy3" parent="." instance=ExtResource("2_doa4n")]
+position = Vector2(453, 52)

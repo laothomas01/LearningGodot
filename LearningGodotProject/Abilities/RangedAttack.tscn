@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwni42f1m5ac0"]
+
+[ext_resource type="Script" path="res://Abilities/RangedAttack.gd" id="1_vh34r"]
+[ext_resource type="Texture2D" uid="uid://cxwlsiyte86o5" path="res://Bubbles/Coloured/16x16/bubble_1.png" id="2_whybb"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mgltx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_whybb")
+}],
+"loop": true,
+"name": &"Bubble",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e6af2"]
+radius = 9.0
+
+[node name="RangedAttack" type="Area2D"]
+position = Vector2(231, 372)
+scale = Vector2(2, 2)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_vh34r")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_mgltx")
+animation = &"Bubble"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_e6af2")
+disabled = true
+
+[node name="LifeSpan" type="Timer" parent="."]
+wait_time = 2.0
+
+[connection signal="timeout" from="LifeSpan" to="." method="_on_life_span_timeout"]

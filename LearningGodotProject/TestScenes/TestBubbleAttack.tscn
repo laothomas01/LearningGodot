@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://b2ysl0478a8ik"]
+
+[node name="TestBubbleAttack" type="CharacterBody2D"]

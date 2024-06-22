@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4eaigwjeer0k"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/Melee.gd" id="1_8mt11"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v8b5d"]
+size = Vector2(27, 19)
+
+[node name="Melee" type="Area2D"]
+collision_layer = 4
+collision_mask = 8
+script = ExtResource("1_8mt11")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(3, 3)
+shape = SubResource("RectangleShape2D_v8b5d")
+
+[node name="LifeSpan" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="LifeSpan" to="." method="_on_life_span_timeout"]

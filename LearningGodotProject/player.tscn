@@ -1,0 +1,88 @@
+[gd_scene load_steps=6 format=3 uid="uid://do321gx1yeuro"]
+
+[ext_resource type="Texture2D" uid="uid://c3n8jeou4d1oa" path="res://dodge_the_creeps_2d_assets/art/playerGrey_walk1.png" id="1_qcyi6"]
+[ext_resource type="Texture2D" uid="uid://dqqel8xlquovp" path="res://dodge_the_creeps_2d_assets/art/playerGrey_walk2.png" id="2_gu61d"]
+
+[sub_resource type="GDScript" id="GDScript_ra6ya"]
+script/source = "#extends Area2D
+#
+#@export var moveSpeed = 1
+#@export var rotationSpeed = 1
+#var screen_size
+#var rotationAngle;
+#
+##signal shoot 
+##var velocity;
+#func _ready():
+	
+#	velocity = Vector2.ZERO 
+#	screen_size = get_viewport_rect().size
+#	position = screen_size/2
+#	rotationAngle = 0
+#func _process(delta):
+#
+#	if Input.is_action_pressed(\"move_right\"):
+#		rotationAngle += PI/180 * rotationSpeed * delta;
+#	if Input.is_action_pressed(\"move_left\"):
+#		rotationAngle -= PI/180 * rotationSpeed * delta;
+#	if Input.is_action_pressed(\"move_up\"):
+#		velocity.y = 1;	
+#		velocity.x = 1;
+#	if Input.is_action_pressed(\"move_down\"):
+#		velocity.y = -1;
+#		velocity.x = -1;
+#	if rotationAngle > 2 * PI:
+#		rotationAngle = 0;
+#	elif rotationAngle < 0:
+#		rotationAngle = 2 * PI;
+#
+#	rotation = rotationAngle 
+#	Vector2(sin(rotation),-cos(rotation))
+#	velocity *= Vector2(sin(rotation),-cos(rotation)) * moveSpeed * delta;
+#
+#	if(velocity.length() > 0):
+#		$AnimatedSprite2D.play(\"walk\")
+#	else:
+#		$AnimatedSprite2D.stop()
+#
+#	position += velocity;
+#
+#
+#
+#func _on_attack_timer_timeout():
+#	pass
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ctaxj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_qcyi6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_gu61d")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_biup3"]
+radius = 52.0
+height = 144.0
+
+[node name="player" type="Area2D"]
+script = SubResource("GDScript_ra6ya")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ctaxj")
+animation = &"walk"
+frame = 1
+frame_progress = 0.292843
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_biup3")
+
+[node name="attackTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="attackTimer" to="." method="_on_attack_timer_timeout"]

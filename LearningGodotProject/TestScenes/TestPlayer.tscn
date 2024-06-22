@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=3 uid="uid://63gs6mnaucdu"]
+
+[ext_resource type="Script" path="res://TestScenes/TestPlayer.gd" id="1_fdxus"]
+[ext_resource type="Texture2D" uid="uid://ddqosy5xujnm7" path="res://Icon.svg" id="1_ni6cw"]
+[ext_resource type="Script" path="res://TestScenes/Hurtbox.gd" id="3_x4lfx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1r4dd"]
+atlas = ExtResource("1_ni6cw")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3bm3p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1r4dd")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_716e7"]
+size = Vector2(129, 128.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_by8d0"]
+size = Vector2(129, 129)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l8q44"]
+radius = 215.671
+
+[node name="TestPlayer" type="CharacterBody2D"]
+scale = Vector2(0.5, 0.5)
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_fdxus")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_3bm3p")
+animation = &"Walk"
+
+[node name="CollisionBox" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 0.75)
+shape = SubResource("RectangleShape2D_716e7")
+
+[node name="CharacterHurtbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+script = ExtResource("3_x4lfx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterHurtbox"]
+self_modulate = Color(0.741176, 0.921569, 0.0588235, 1)
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_by8d0")
+
+[node name="DisableTimer" type="Timer" parent="CharacterHurtbox"]
+
+[node name="Attack" type="Node2D" parent="."]
+
+[node name="BubbleTimer" type="Timer" parent="Attack"]
+
+[node name="BubbleAttackTimer" type="Timer" parent="Attack/BubbleTimer"]
+wait_time = 0.3
+
+[node name="EnemyDetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 64
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetectionArea"]
+shape = SubResource("CircleShape2D_l8q44")
+
+[connection signal="area_entered" from="CharacterHurtbox" to="CharacterHurtbox" method="_on_area_entered"]
+[connection signal="hurt" from="CharacterHurtbox" to="." method="_on_hurtbox_hurt"]
+[connection signal="timeout" from="CharacterHurtbox/DisableTimer" to="CharacterHurtbox" method="_on_disable_timer_timeout"]
+[connection signal="timeout" from="Attack/BubbleTimer" to="." method="_on_bubble_timer_timeout"]
+[connection signal="timeout" from="Attack/BubbleTimer/BubbleAttackTimer" to="." method="_on_bubble_attack_timer_timeout"]
+[connection signal="body_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_body_entered"]
+[connection signal="body_exited" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_body_exited"]

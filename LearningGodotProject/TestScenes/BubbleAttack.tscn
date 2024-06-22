@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5hhmlpuqs51o"]
+
+[ext_resource type="Script" path="res://TestScenes/BubbleAttack.gd" id="1_7tty8"]
+[ext_resource type="Texture2D" uid="uid://ck5mkfaaj2ulc" path="res://Bubbles/Coloured/16x16/bubble_3.png" id="1_fqskd"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_je0pa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_fqskd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kmhny"]
+radius = 10.0499
+
+[node name="BubbleAttack" type="Area2D"]
+top_level = true
+collision_layer = 32
+collision_mask = 8
+script = ExtResource("1_7tty8")
+moveSpeed = 200
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_je0pa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_kmhny")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

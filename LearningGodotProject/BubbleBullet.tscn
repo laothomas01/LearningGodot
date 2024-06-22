@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://ljxmcnco8i8x"]
+
+[ext_resource type="Script" path="res://BubbleBullet.gd" id="1_apalr"]
+[ext_resource type="Texture2D" uid="uid://qnrq8ch61xxg" path="res://Bubbles/Coloured/16x16/bubble_2.png" id="1_f5aek"]
+[ext_resource type="Texture2D" uid="uid://5bg47j7fjhgt" path="res://Bubbles/Coloured/16x16/bubble_4.png" id="2_ymajf"]
+[ext_resource type="Texture2D" uid="uid://35y3qk6oh6k3" path="res://Bubbles/Coloured/16x16/bubble_5.png" id="3_v33yk"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n5wl2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ymajf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_f5aek")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_v33yk")
+}],
+"loop": true,
+"name": &"bubble",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p0f0l"]
+radius = 9.0
+
+[node name="BubbleBullet" type="Area2D"]
+scale = Vector2(5, 5)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_apalr")
+moveSpeed = 200
+
+[node name="Projectile" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_n5wl2")
+animation = &"bubble"
+frame = 1
+frame_progress = 0.507801
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_p0f0l")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

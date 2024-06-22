@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://du1pd1jt7f8po"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_eansa"]
+[ext_resource type="PackedScene" uid="uid://bv5nffunb3sum" path="res://Player.tscn" id="1_lxyy0"]
+[ext_resource type="PackedScene" uid="uid://ckye67jiq6lhr" path="res://EnemySpawner.tscn" id="2_pivq3"]
+[ext_resource type="PackedScene" uid="uid://dgwhmmefdohw3" path="res://CustomCamera2D.tscn" id="4_ih0sn"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_eansa")
+
+[node name="Player" parent="." instance=ExtResource("1_lxyy0")]
+position = Vector2(392, 121)
+rotationSpeed = 200
+
+[node name="EnemySpawner" parent="." instance=ExtResource("2_pivq3")]
+light_mask = 0
+visibility_layer = 0
+
+[node name="CustomCamera2D" parent="." instance=ExtResource("4_ih0sn")]
+light_mask = 0
+visibility_layer = 0
