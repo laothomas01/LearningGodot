@@ -5,7 +5,12 @@ extends CharacterBody2D
 basic slime 
 
 [] fix the enemy spawn positions
-[] make enemy spawning from boss cleaner 
+[] make enemy spawning from boss cleaner #
+#		if Input.is_action_just_pressed("Dash") && move_direction.length() > 0:
+#			print('Dash')
+#			_update_velocity(move_direction,move_speed * 10,delta)
+#		else:
+#			_update_velocity(move_direction,move_speed,delta)
 	
 """
 
@@ -174,10 +179,11 @@ func spawn_minions():
 		slime_spawn_timer.stop()
 		state = WALK
 	else:
-		enemy_spawn_count += 1
-		var enemy_spawn = preload("res://TestScene3/Scenes/Enemies/Enemy1.tscn").instantiate()
-		enemy_spawn.position = get_random_position()
-		add_child(enemy_spawn)
+		pass
+#		enemy_spawn_count += 1
+##		var enemy_spawn = preload("res://TestScene3/Scenes/Enemies/Enemy1.tscn").instantiate()
+#		enemy_spawn.position = get_random_position()
+#		add_child(enemy_spawn)
 
 func _on_spawn_enemy_timer_timeout():
 	spawn_minions()

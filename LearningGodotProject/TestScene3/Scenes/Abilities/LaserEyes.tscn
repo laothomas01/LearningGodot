@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dv2ugovhjp03r"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/Abilities/LaserEyes.gd" id="1_dmbx8"]
+
+[node name="LaserEyes" type="Node2D"]
+script = ExtResource("1_dmbx8")
+
+[node name="Timer" type="Timer" parent="."]

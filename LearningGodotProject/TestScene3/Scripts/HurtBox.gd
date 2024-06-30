@@ -18,6 +18,7 @@ what is an iframe:
 signal hurt(damage)
 
 func _on_area_entered(area):
+	print("hit by: ",area)
 #	if not area.has_collided:
 	var damage = area.damage 
 	collision.call_deferred("set","disabled",true)

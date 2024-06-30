@@ -3,14 +3,16 @@
 [ext_resource type="Script" path="res://TestScene3/Scenes/Melee.gd" id="1_8mt11"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v8b5d"]
-size = Vector2(27, 19)
+size = Vector2(7.50151, 13.1298)
 
 [node name="Melee" type="Area2D"]
+scale = Vector2(2.755, 2.755)
 collision_layer = 4
 collision_mask = 8
 script = ExtResource("1_8mt11")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.362976, 8.80536)
 scale = Vector2(3, 3)
 shape = SubResource("RectangleShape2D_v8b5d")
 

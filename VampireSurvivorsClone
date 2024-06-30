@@ -244,7 +244,7 @@ Vampire Survivors Clone:
 [] make big boss slime that makes other slimes
 	[] add some attack behaviors (without using an attack animation ) 
 	 
-
+========================= DESIGN DOCUMENT =================================
 
 Necessities needed for an MVP:
 
@@ -304,16 +304,41 @@ core concept of game:
 - is this 2D or 3D? (currently 2D but woudl like to move to 3D eventually) 
 
 
-
 basic player features:
 [] player can move (note: current it is 4 directional. can make it 8 directional later) 
-[] player can receive damage(note: anything that can interact with player's hurtbox) 
-[] player can level up
+	[] player faces the direction it's moving
+		[] flip the sprite 
+	[] player attacks in direction being moved unless not required 
+	[] 
+	
+[x] player can receive damage(note: anything that can interact with player's hurtbox) 
+[x] player can level up
 [] player can select abilities upon level up(note: an "ability" represents an item or a skill) 
+	- abilities are selected at random for now 
 [] player can upgrade abilities
 [] player can collect dropped exp gems 
 [] player has animations 
-[] 
+	[x] move animations
+	[] attack animations 
+[] player can die 
+[] player has an ability database to access 
+[] persist player's data onto a json file 
+[] player has a dash mechanic 
 
+advanced basic player features:
+[] player can select a class to play
+[] class abilities 
+	Werewolf class:
+		default ability:
+			[] basic melee
+			[] passive rage ability 
+			[] player can "roll" 
+		other abilities:   
+			[] howl of terror
+				- affected enemies take 15% more damage from player attacks 
+			
+
+			
+				
 
 

@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://7sekvvjjo1rl"]
+
+[node name="HowlProjectile" type="Node2D"]
+
+[node name="Timer" type="Timer" parent="."]

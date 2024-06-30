@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1ixoqwlw8myi"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/LaserBeam.gd" id="1_1ihyr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_33rha"]
+size = Vector2(64, 12)
+
+[node name="LaserBeam" type="Area2D"]
+script = ExtResource("1_1ihyr")
+
+[node name="Lifespan" type="Timer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(32, 0)
+shape = SubResource("RectangleShape2D_33rha")

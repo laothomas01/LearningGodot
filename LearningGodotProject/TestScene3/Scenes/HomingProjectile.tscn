@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://dfdlgdkyiejk5"]
+
+[node name="HomingProjectile" type="Node2D"]
