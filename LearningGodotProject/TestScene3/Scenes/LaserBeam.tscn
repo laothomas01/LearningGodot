@@ -13,3 +13,6 @@ script = ExtResource("1_1ihyr")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(32, 0)
 shape = SubResource("RectangleShape2D_33rha")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="timeout" from="Lifespan" to="." method="_on_lifespan_timeout"]

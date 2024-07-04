@@ -38,7 +38,6 @@ func _process(delta):
 where to handle projectile behavior upon collision 
 """
 func _on_area_entered(area):
-	
 	# if type if piercing and piercing charges == 0: remove projectile from memory 
 	if type == PIERCING:
 		if piercing_charges:

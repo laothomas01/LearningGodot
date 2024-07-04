@@ -65,6 +65,11 @@ func idle_state():
 func walk_state():
 #	print("walk state")
 	animation.play("IdleOrMove")
+
+
+
+# this function and state can be delegated to a base class all enemies can inherit from
+# 	- to reduce code redundancy 
 func damage_state():
 	print('enter damage state')
 	if health <= 0:
@@ -74,12 +79,12 @@ func damage_state():
 		animation.play("Death")
 		await animation.animation_finished
 		state = DEATH
-#	else:
-##		print("damage state")
-#		animation.play("TakeDamage")
-#		await animation.animation_finished
+	else:
+		print("damage state")
+		animation.play("TakeDamage")
+		await animation.animation_finished
 		emit_signal("hit")
-#		state = WALK
+		state = WALK
 
 	
 """

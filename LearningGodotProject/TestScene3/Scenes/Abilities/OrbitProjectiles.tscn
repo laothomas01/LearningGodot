@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://53x4pqnq1cuu"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/Abilities/OrbitProjectiles.gd" id="1_cfe7j"]
+
+[node name="OrbitProjectiles" type="Node2D"]
+script = ExtResource("1_cfe7j")

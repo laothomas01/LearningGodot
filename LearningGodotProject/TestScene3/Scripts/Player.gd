@@ -13,6 +13,16 @@ var current_health = max_health
 var detected_enemies = []
 var move_direction = Vector2.ZERO
 var last_direction = Vector2.ZERO
+var lifesteal_heal = 0
+var lifesteal_probability = 0
+var regenerate_heal = 0
+var regenerate_rate = 0
+var activate_ragemode = false 
+var ragemode_damage_bonus = 0
+var ragemode_attackspeed_bonus = 0
+var move_speed_bonus = 0
+var max_health_bonus = 0
+
 
 """
 PLAYER UPGRADE DATABASE 
@@ -20,7 +30,10 @@ PLAYER UPGRADE DATABASE
 var upgrade_choice = [
 	"slash","shove","howl","homing_missiles",
 	"laser eyes","disease cloud","orbit thing","reflect",
-	"rabies","rage mode","life steal","regenerate","increase move speed","increase item pick up range"
+	"rabies","rage mode","life steal",
+	"regenerate","increase move speed",
+	"increase item pick up range","vaporize",
+	"increase max health","instant heal"
 	]
 
 """
@@ -47,22 +60,24 @@ COMBAT ABILITIES:(2 melee, 3 ranged, 2 area)
 				- basic range combat attack.
 				- finds nearest enemy, calculates trajectory between enemy and projectile, moves to target 
 	
-	[] laser eyes:
+	[x] laser eyes:
 			- offense combat ability:
 				- player fires a laser that rotates for a duration hitting any enemies it encounters 
-	- disease cloud:
+				
+	
+	[x]- disease cloud:
 			- offense combat ability:
 				- player unleashes an area damage dealing cloud 
 					- damage dealt to enemies entering area
 					- does damage over time to enemies 
-	- object orbits player:
+	[x] - object orbits player:
 			- offense combat ability:
 				- player gains a rotating orb 
 				- enemies hit by orb take damage 
-	- chain lightning
-	- bouncing ranged attack
-	- exploding ranged attack 
-	- instantenous vaporization 
+	[] chain lightning
+	[] bouncing ranged attack
+	[] exploding ranged attack 
+	[] instantenous vaporization 
 		- single target a random enemy and by chance, just instantly kill the enemy
 	
 	- bring on the apocalypse
@@ -76,28 +91,28 @@ COMBAT ABILITIES:(2 melee, 3 ranged, 2 area)
 			- spawn an area where if enemy walks into, enemy takes damage
 	- 		
 PASSIVE ABILITIES:
-	- reflect damage:
+	[] reflect damage:
 			offense passive ability:
 				- player deals damage to enemies attacking player 
-	- rabies:
+	 [] rabies:
 			- offensive passive ability:
 				- if damage dealt to enemy, player has chance to infect enemy and cause enemy to attack other enemies 
-	- rage mode:
+	 [] rage mode:
 			- offense passive ability:
 				- if current_health < 1/2 of max current_health: activate rage ability
 					- apply bonus attack speed to offensive combat abilities
 					- apply bonus attack damage to offsenive combat abilities 
-	- life steal:
+	 [] life steal:
 			- defense passive ability:
 					- on dealing damage to enemy, player has chance to heal 
-	- regenerate:
+	 [] regenerate:
 			- defense passive ability:
 					- player over time heals a certain amount 
-	- temporary invulnerable
+	 [] temporary invulnerable
 	
-	- cloak:
+	 [] cloak:
 			- can walk through enemeis 
-	corpse explosion
+	 [] corpse explosion
 			- on enemy death, trigger an area of damage
 	
 BASIC STAT BONUSES: 				
@@ -153,39 +168,46 @@ OFFENSIVE ABILITIES
 var slash = null
 var howl = null
 var homing_missiles = null
+var laser_eyes = null
+var disease_cloud = null
+var orbit_thing = null
 
 """
 STATUS EFFECTS
 - we can put this into a dictionary later 
 - also use inheritance to reduce lines of code 
 """
-#acquired through skills 
-var in_rage_mode = false 
-# player buffs,debuffs 
-#var weaken_damage_reduction = 0
-var rage_mode_damage_bonus = 0
-var rage_mode_attack_speed_bonus = 0
 
-# applied from external entities
-# will figure out debuffs later  
-var is_weakened = false 
-var	weaken_amount = 0
+
+# # applied from external entities
+# # will figure out debuffs later  
+# var is_weakened = false 
+# var	weaken_amount = 0
+
 var last_move_direction = Vector2.ZERO
 
 """
 PASSIVE ABILITIES 
 """
 # player passive abilities 
-var life_steal_recovery = 0
-var life_steal_probability = 0
+# var life_steal_recovery = 0
+# var life_steal_probability = 0
 
 var collected_upgrades = []
 
 func _ready():
 	# starting upgrade for current class: werewolf 
-	upgrade_character("slash")
-	upgrade_character("howl")
-	upgrade_character("homing missiles")
+#	upgrade_character("slash")
+#	upgrade_character("howl")
+#	upgrade_character("homing missiles")
+#	upgrade_character("laser eyes")
+#	upgrade_character("disease cloud")
+	upgrade_character("orbit thing")
+	upgrade_character("regenerate")
+	upgrade_character("rage mode")
+	upgrade_character("increase move speed");
+	current_health = current_health / 2
+	
 	
 func attack_state():
 	animation.play("Attack")
@@ -200,9 +222,9 @@ func hurt_state():
 		animation.play("Hurt")
 		await animation.animation_finished
 		state = IDLE
-		if not in_rage_mode and current_health <= max_health * 0.5 and collected_upgrades.has("rage_mode"):
+		if not activate_ragemode and current_health <= max_health/2 and collected_upgrades.has("rage mode"):
 			print('in rage mode!')
-			in_rage_mode = true
+			activate_ragemode = true
 		
 func idle_state():	
 	animation.play("Idle")
@@ -229,10 +251,9 @@ func walk_state():
 				
 	
 	"""
+	
 func _process(delta):
 		_handle_user_input()
-		var current_move_speed = move_speed
-			# if you are moving
 		if state != HURT:
 			state = WALK if velocity.length_squared() > 0 else IDLE 
 		
@@ -241,22 +262,17 @@ func _process(delta):
 		velocity =  move_direction * move_speed * delta	
 		_set_face_direction(move_direction)		
 		
-		
 func _physics_process(delta):
 		move_and_slide()
 
 func _handle_user_input():
 	move_direction = Input.get_vector("move_left","move_right","move_up","move_down")
 	
-func _update_velocity(move_direction,speed,delta):
-		pass
-			
 func _set_face_direction(direction:Vector2):
 	var scale_x = sign(direction.x)
 	if scale_x != 0:
 		transform2D.scale.x = scale_x
 
-	
 """
 if enemy not nearby, detect a random position
 this looks like a feature better suited for ranged attack 
@@ -269,38 +285,6 @@ is this function only for ranged attacks???
 
 """
 
-
-#"""
-#
-#perhaps move this to a ranged targetting skill? 
-#
-##"""
-#func _detect_random_enemy_position():
-#	if detected_enemies.size() > 0:
-#		return detected_enemies.pick_random().global_position
-#	else:
-#		# just find a random location in the viewport and shoot 
-
-#		return Vector2(rand_x,rand_y)
-#
-#func _detect_random_enemy():
-#	if detected_enemies.size() > 0:
-#		return detected_enemies.pick_random()
-#
-#func _get_first_detected_enemy():
-#	if detected_enemies.size() > 0:
-#		return detected_enemies[0]
-#
-##func _first_seen_enemy():
-##	if detected_enemies.size() > 0:
-##		return detected_enemies[0]
-##	else:
-##		return null
-#
-#func _get_detected_enemies():
-#	return detected_enemies
-
-		
 """
 
 what is an upgrade? items, abilities, passive abilities, stat increase 
@@ -332,6 +316,8 @@ func upgrade_character(upgrade):
 		collected_upgrades.append(upgrade)
 		print('you have obtained ability: ', upgrade)
 		match upgrade:
+
+			#  ============================ OFFENSE ABILITIES ============================
 			"slash":
 				slash = preload("res://TestScene3/Scenes/Abilities/CloseCombat.tscn").instantiate()
 				add_child(slash)
@@ -342,23 +328,42 @@ func upgrade_character(upgrade):
 				homing_missiles = preload("res://TestScene3/Scenes/Abilities/Homing_Missiles.tscn").instantiate()
 				add_child(homing_missiles)
 			"laser eyes":
-				pass
-					
-				
-#			"ranged_attack":
-##				ranged_attack = get_node("Attack/RangedAttack")
-##				ranged_attack.start_timer()
-#				pass
-#			"close_combat":
-##				close_combat = get_node("Attack/CloseCombat")
-##				close_combat.start_timer()
-#				pass
-#			"life_steal":
-#				life_steal_recovery = 1
-#				life_steal_probability = 0.1
-#			"rage_mode":
-#				rage_mode_attack_speed_bonus = 0.1
-#				rage_mode_damage_bonus = 0.4
+				laser_eyes = preload("res://TestScene3/Scenes/Abilities/LaserEyes.tscn").instantiate()
+				add_child(laser_eyes)
+			"disease cloud":
+				disease_cloud = preload("res://TestScene3/Scenes/Abilities/DiseaseCloud.tscn").instantiate()
+				add_child(disease_cloud)
+			"orbit thing":
+				orbit_thing = preload("res://TestScene3/Scenes/Abilities/OrbitProjectiles.tscn").instantiate()
+				add_child(orbit_thing)
+				orbit_thing.create_orbs()
+			
+			# ============================= PASSIVE ABILITIES =================================
+			"life steal":
+				lifesteal_heal = 1
+				lifesteal_probability = 0.1
+			"regenerate":
+				regenerate_heal = 1
+				regenerate_rate = 1
+				var regenerate_timer = Timer.new()
+				regenerate_timer.name = "regenerate_timer"
+				regenerate_timer.connect("timeout",Callable(self,"regenerate_timer_timeout"))
+				add_child(regenerate_timer)
+				regenerate_timer.wait_time = regenerate_rate
+				regenerate_timer.start()
+			"rage mode":
+				ragemode_attackspeed_bonus = 0.1	
+				ragemode_damage_bonus = 3
+			# =========================== STAT BONUSES =========================================
+			"increase move speed":
+				move_speed_bonus = 0.1
+				modify_move_speed(move_speed_bonus)
+			"increase max health":
+				max_health_bonus = 3
+				modify_max_health(max_health_bonus)
+			# ============================ ITEM ================================================
+			"instant heal":
+				current_health += 10
 
 func calculate_experience_gain(gem_experience):
 	current_exp += gem_experience
@@ -397,11 +402,10 @@ func _on_collection_area_area_entered(area):
 			calculate_experience_gain(area.current_exp)
 
 
-# for every enemy that takes damage, make sure it sends a "hit" signal 
+# as long as an enemy is hit and sends a "hit" signal, trigger this function 
 func enemy_hit():
-	if randi() % 100 + 1 < life_steal_probability * 100:
-	#TODO: add in probability of recovery s
-		healing(life_steal_recovery)
+	if randi() % 100 + 1 < lifesteal_probability * 100:
+		healing(lifesteal_heal)
 	
 func healing(value):
 	print('healing amount: ')
@@ -412,11 +416,19 @@ func healing(value):
 	else:
 		if current_health > max_health * 0.5:
 			print('off rage mode')
-			in_rage_mode = false
-			print(in_rage_mode)
-		print('current current_health:')
-		print(current_health)
+			activate_ragemode = false
+			print(activate_ragemode)
+		print('current_health:',current_health) 
 		current_health += value
 		
 func set_state(state):
 	state = state
+
+func regenerate_timer_timeout():
+	healing(regenerate_heal)
+
+func modify_move_speed(bonus):
+	move_speed = move_speed + (move_speed * bonus)
+
+func modify_max_health(bonus):
+	max_health = max_health + max_health_bonus

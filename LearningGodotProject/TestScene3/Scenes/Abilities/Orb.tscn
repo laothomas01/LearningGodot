@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://blhhptnlo8c3t"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/Abilities/Orb.gd" id="1_3sbow"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ye80k"]
+
+[node name="Orb" type="Area2D"]
+script = ExtResource("1_3sbow")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ye80k")

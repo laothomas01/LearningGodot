@@ -1,10 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvh4xhld3e32q"]
+[gd_scene load_steps=4 format=3 uid="uid://cvh4xhld3e32q"]
 
 [ext_resource type="Script" path="res://TestScene3/Scenes/Main.gd" id="1_wkj2f"]
-[ext_resource type="PackedScene" uid="uid://c1ixoqwlw8myi" path="res://TestScene3/Scenes/LaserBeam.tscn" id="2_bvlfy"]
+[ext_resource type="PackedScene" uid="uid://dbx1sdd4dfuh8" path="res://TestScene3/Scenes/Player.tscn" id="2_t168g"]
+[ext_resource type="PackedScene" uid="uid://b5tbyulmcjpja" path="res://TestScene3/Scenes/Enemy1.tscn" id="3_41ybx"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_wkj2f")
 
-[node name="LaserBeam" parent="." instance=ExtResource("2_bvlfy")]
-position = Vector2(60, 418)
+[node name="Player" parent="." instance=ExtResource("2_t168g")]
+
+[node name="Enemy" parent="." instance=ExtResource("3_41ybx")]
+position = Vector2(312, 354)

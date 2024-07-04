@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dd3d745xox3vn"]
+
+[ext_resource type="Script" path="res://TestScene3/Scenes/Abilities/DamageArea.gd" id="1_301qy"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_28ggk"]
+radius = 42.19
+
+[node name="DamageArea" type="Area2D"]
+top_level = true
+script = ExtResource("1_301qy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_28ggk")
+debug_color = Color(0.294118, 0.494118, 0.207843, 0.419608)
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_lifespan_timeout"]
