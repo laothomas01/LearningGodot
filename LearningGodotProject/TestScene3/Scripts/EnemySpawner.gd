@@ -1,11 +1,14 @@
 extends Node2D
 
+
 @onready var character = get_tree().get_first_node_in_group("character")
 @onready var spawnTimer = get_node("EnemySpawnTimer")
 @onready var newWaveTimer = get_node("NewWaveTimer")
 
 
+
 var currentWave = 1
+
 """
 
 could possible make the value of the key an array so you have multiple enemies spawning inside the current wave 
@@ -19,9 +22,9 @@ maybe we can have a randomized enemy spawn pick based on the current wave count?
 
 """
 var enemyWaves = {
-	1 : 	 preload("res://TestScene3/Scenes/Enemies/Enemy1.tscn"),
-	2: 		 preload("res://TestScene3/Scenes/Enemies/Enemy1.tscn"),
-	3: 		 preload("res://TestScene3/Scenes/Enemies/Enemy1.tscn"),
+	1 : 	 preload("res://TestScene3/Scenes/Enemy1.tscn"),
+	2: 		 preload("res://TestScene3/Scenes/Enemy1.tscn"),
+	3: 		 preload("res://TestScene3/Scenes/Enemy1.tscn"),
 }
 
 

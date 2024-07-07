@@ -2,19 +2,24 @@ extends CharacterBody2D
 
 """
 
-basic slime 
-	
+what can make this game immersive:
+	- sound design
+	- interesting art style 
+	- 
 """
-
-
 
 @export var movement_speed = 1
 @export var damage = 3
+
+#because character is a singleton?? 
 @onready var character = get_tree().get_first_node_in_group("character") 
 @onready var animation = $TransformAdjustment/AnimatedSprite2D
 @onready var hit_box = $HitBox
+@export var maxhealth = 1.0
+var health = 0
 
-var exp_gem = preload("res://TestScene3/Scenes/Gem.tscn")
+
+# var exp_gem = preload("res://TestScene3/Scenes/Gem.tscn")
 
 signal hit()
 signal death()
@@ -39,22 +44,16 @@ var state: int = WALK:
 			DAMAGE:
 				damage_state()
 			
-@export var maxhealth = 1.0
-var health = maxhealth
-
 
 func _ready():
 	connect("hit",Callable(character,"enemy_hit"))
 	hit_box.damage = damage
 	state = WALK
+	health = maxhealth
 	
 func _process(delta):
-	pass
-#	print(state)
-#	if state != DAMAGE :
-#				state = WALK if velocity.length_squared() > 0 else IDLE
-#	var move_direction = global_position.direction_to(character.global_position)
-#	velocity = move_direction * movement_speed * delta
+	var move_direction = global_position.direction_to(character.global_position)
+	velocity = move_direction * movement_speed * delta
 			
 func _physics_process(delta):
 	move_and_slide()
@@ -65,7 +64,6 @@ func idle_state():
 func walk_state():
 #	print("walk state")
 	animation.play("IdleOrMove")
-
 
 
 # this function and state can be delegated to a base class all enemies can inherit from
@@ -109,12 +107,18 @@ callback function for taking damage signals
 """
 
 func _on_hurt_box_hurt(damage):
-	print('hurt box hit')
-# ============================== 
-# 	keep this block of code  
+#	pass
+#	print('hurt box hit')
+## ============================== 
+## 	keep this block of code  
+	hurt(damage)
+#	state = DAMAGE
+
+func hurt(damage):
+	print('received damage:',damage)
 	health -= damage
+	print('current health:',health)
 	state = DAMAGE
-	
 	
 	
 # ===============================

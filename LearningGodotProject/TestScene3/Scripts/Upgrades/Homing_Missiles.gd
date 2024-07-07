@@ -5,7 +5,7 @@ renable everything when coming back to this to complete homing missile skill
 extends Node2D
 
 @export var max_damage = 1
-@export var max_cooldown = 1
+@export var max_cooldown = 0.1
 @export var projectile_speed = 200
 @onready var timer = get_node("Timer")
 @onready var character = get_tree().get_first_node_in_group("character")
@@ -15,13 +15,10 @@ func _ready():
 	timer.wait_time = max_cooldown	
 	timer.start()
 	
-	
-	
-			
 func _on_timer_timeout():
 		var projectile = preload("res://TestScene3/Scenes/Abilities/Projectile.tscn").instantiate()
+		projectile.set_type("HOMING")		
 		add_child(projectile)
-		projectile.set_type("HOMING")
 		projectile.move_speed = projectile_speed
 		projectile.global_position = global_position
 		projectile.damage = max_damage 

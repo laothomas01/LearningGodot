@@ -2,12 +2,11 @@
 
 [ext_resource type="Script" path="res://TestScene3/Scenes/Main.gd" id="1_wkj2f"]
 [ext_resource type="PackedScene" uid="uid://dbx1sdd4dfuh8" path="res://TestScene3/Scenes/Player.tscn" id="2_t168g"]
-[ext_resource type="PackedScene" uid="uid://b5tbyulmcjpja" path="res://TestScene3/Scenes/Enemy1.tscn" id="3_41ybx"]
+[ext_resource type="PackedScene" uid="uid://c1jftq1sojvuu" path="res://TestScene3/Scenes/Utilieies/GameManager.tscn" id="3_tjr7x"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_wkj2f")
 
 [node name="Player" parent="." instance=ExtResource("2_t168g")]
 
-[node name="Enemy" parent="." instance=ExtResource("3_41ybx")]
-position = Vector2(312, 354)
+[node name="GameManager" parent="." instance=ExtResource("3_tjr7x")]

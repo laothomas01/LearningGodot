@@ -262,8 +262,8 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uj07h"]
 size = Vector2(126, 129)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ra3s4"]
-radius = 98.1275
+[sub_resource type="CircleShape2D" id="CircleShape2D_hev6y"]
+radius = 32.0
 
 [node name="Player" type="CharacterBody2D" groups=["character"]]
 collision_layer = 0
@@ -300,14 +300,13 @@ shape = SubResource("RectangleShape2D_uj07h")
 [node name="DisableTimer" type="Timer" parent="HurtBox"]
 
 [node name="ItemCollectHitBox" type="Area2D" parent="."]
-visible = false
 collision_layer = 128
-collision_mask = 64
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemCollectHitBox"]
-shape = SubResource("CircleShape2D_ra3s4")
+position = Vector2(0, 16)
+shape = SubResource("CircleShape2D_hev6y")
 
 [connection signal="area_entered" from="HurtBox" to="HurtBox" method="_on_area_entered"]
 [connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
 [connection signal="timeout" from="HurtBox/DisableTimer" to="HurtBox" method="_on_disable_timer_timeout"]
-[connection signal="area_entered" from="ItemCollectHitBox" to="." method="_on_collection_area_area_entered"]

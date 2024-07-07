@@ -13,7 +13,7 @@ func _ready():
 	timer.start()
 
 func _on_timer_timeout():
-	var laser = preload("res://TestScene3/Scenes/LaserBeam.tscn").instantiate()
+	var laser = preload("res://TestScene3/Scenes/Abilities/LaserBeam.tscn").instantiate()
 	add_child(laser)
 	laser.rotation_speed = max_rotation_speed
 	laser.damage = max_laser_damage

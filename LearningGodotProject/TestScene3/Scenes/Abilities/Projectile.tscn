@@ -25,7 +25,6 @@ top_level = true
 position = Vector2(249, 191)
 collision_layer = 4
 collision_mask = 8
-collision_priority = 300000.0
 script = ExtResource("1_3f8sc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

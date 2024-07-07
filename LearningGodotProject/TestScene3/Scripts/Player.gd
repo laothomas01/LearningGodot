@@ -1,16 +1,32 @@
 extends CharacterBody2D
 
+
+"""
+Classes player can player as:
+	- Werewolf
+		- starting upgrade:
+			- slash
+		- base stats:g
+			- increased damage
+			- increased health 
+	- Vampire
+		- 
+	- Lich
+	- Cthulu
+"""
+
+
 """
 PLAYER BASIC ATTRIBUTES 
 """
 @onready var transform2D = get_node("TransformAdjustment")
 @onready var animation = get_node("TransformAdjustment/AnimatedSprite2D")
 @export var move_speed = 1
-var exp_cap = 4
-var current_exp = 0
-var max_health = 100
-var current_health = max_health
-var detected_enemies = []
+
+var max_exp = 4
+var current_exp = 0 # do we want to turn exp into in game currency instead? for buying upgrades?? 
+var maxhealth = 100
+var current_health = 0
 var move_direction = Vector2.ZERO
 var last_direction = Vector2.ZERO
 var lifesteal_heal = 0
@@ -21,109 +37,43 @@ var activate_ragemode = false
 var ragemode_damage_bonus = 0
 var ragemode_attackspeed_bonus = 0
 var move_speed_bonus = 0
-var max_health_bonus = 0
-
+var maxhealth_bonus = 0
 
 """
-PLAYER UPGRADE DATABASE 
+- maybe seperate some skills to be specific to the chosen played class
+- the rest of the skills are universal 
+- 
 """
 var upgrade_choice = [
-	"slash","shove","howl","homing_missiles",
-	"laser eyes","disease cloud","orbit thing","reflect",
-	"rabies","rage mode","life steal",
-	"regenerate","increase move speed",
-	"increase item pick up range","vaporize",
-	"increase max health","instant heal"
-	]
+	# hits multiple enemies
+	"slash",
+	# currently hits one enemy at a time
+	"howl",
+	# hits one enemy at a time 
+	"homing missiles",
+	# hits multiple enemies 
+	"laser eyes",
+	#hits multiple enemies 
+	"disease cloud",
+	# hits multiple enemies 
+	"orbit thing",
+	"rage mode",
+	"life steal",
+	"regenerate",
+	"increase move speed",
+	"increase max health",
+	"heal"
+]
 
-"""
-
-Werewolf class toolkit 
-
-upgrades:
-	
-COMBAT ABILITIES:(2 melee, 3 ranged, 2 area)
-	[x]  slash:
-			offense combat ability:
-				- basic melee attack
-	[] shove:
-			offsense combat ability:
-				- no damage dealing
-				- knocks back enemy 
-	[x] howl: 
-			offense combat ability:
-				- basic ranged combat attack that moves in the direction player is facing 
-				- no auto targetting
-					ex: facing left, projectile flies left. facing right, projectile flies right. etc... top, bottom 
-	[x] homing missiles:
-			offense combat ability:
-				- basic range combat attack.
-				- finds nearest enemy, calculates trajectory between enemy and projectile, moves to target 
-	
-	[x] laser eyes:
-			- offense combat ability:
-				- player fires a laser that rotates for a duration hitting any enemies it encounters 
-				
-	
-	[x]- disease cloud:
-			- offense combat ability:
-				- player unleashes an area damage dealing cloud 
-					- damage dealt to enemies entering area
-					- does damage over time to enemies 
-	[x] - object orbits player:
-			- offense combat ability:
-				- player gains a rotating orb 
-				- enemies hit by orb take damage 
-	[] chain lightning
-	[] bouncing ranged attack
-	[] exploding ranged attack 
-	[] instantenous vaporization 
-		- single target a random enemy and by chance, just instantly kill the enemy
-	
-	- bring on the apocalypse
-		- nuke all enemies and clear the screen 
-	- fire breath
-		- shoot a coned box collider that damages enemy in the colider
-	- throw pillars at enemis
-		- spawn colliders that can knockback enemies and deal damage 
-		- enemies cannot walk past these pillars if they are still instantiated 
-	- fire walk:
-			- spawn an area where if enemy walks into, enemy takes damage
-	- 		
-PASSIVE ABILITIES:
-	[] reflect damage:
-			offense passive ability:
-				- player deals damage to enemies attacking player 
-	 [] rabies:
-			- offensive passive ability:
-				- if damage dealt to enemy, player has chance to infect enemy and cause enemy to attack other enemies 
-	 [] rage mode:
-			- offense passive ability:
-				- if current_health < 1/2 of max current_health: activate rage ability
-					- apply bonus attack speed to offensive combat abilities
-					- apply bonus attack damage to offsenive combat abilities 
-	 [] life steal:
-			- defense passive ability:
-					- on dealing damage to enemy, player has chance to heal 
-	 [] regenerate:
-			- defense passive ability:
-					- player over time heals a certain amount 
-	 [] temporary invulnerable
-	
-	 [] cloak:
-			- can walk through enemeis 
-	 [] corpse explosion
-			- on enemy death, trigger an area of damage
-	
-BASIC STAT BONUSES: 				
-	- increase move speed
-			- stat upgrade:
-					- player moves faster
-	- increase item pick up range:
-			- stat upgrade:
-					- player pickup item range is increased
-		
-"""
+enum
+{
+	WEREWOLF,
+	VAMPIRE,
+	DEEPONE,
+	LICH,
+	ANTICHRIST,
+	HERETIC
+}
 
 enum {
 	IDLE,
@@ -131,14 +81,15 @@ enum {
 	DEATH,
 	RUNNING,
 	HURT,
-	ATTACK
+	ATTACK,
+	LEVEL_UP
 }
 
 var state: int = WALK:
 	set(value):
 		state = value
 		match state:
-			IDLE:
+			IDLE:	
 				idle_state()
 			WALK:
 				walk_state()
@@ -148,9 +99,12 @@ var state: int = WALK:
 				hurt_state()
 			ATTACK:
 				attack_state()
-			DEATH:#
+			DEATH:
 				pass
+				
+signal leveled_up()
 
+@onready var game_manager = get_parent().get_node("GameManager")
 
 # all available attacks player can obtain 
 # make them global variables incase data needs to change 
@@ -165,6 +119,9 @@ OFFENSIVE ABILITIES
 #var close_combat = null 
 #var area_combat = null 
 
+
+
+# instances of abilities with more complex behavior 
 var slash = null
 var howl = null
 var homing_missiles = null
@@ -195,25 +152,46 @@ PASSIVE ABILITIES
 
 var collected_upgrades = []
 
+
+"""
+smoke check all these abilities:
+	
+	[x] slash 
+	[x] howl
+	[x] homing missiles 
+	[x] laser eyes  
+	[x] disease cloud 
+	[x] regenerate  
+	[x] rage mode
+	[x] increase move speed
+	[x] disease cloud
+	[] life steal 
+"""
 func _ready():
+	connect("leveled_up",Callable(game_manager,"on_level_up"))
 	# starting upgrade for current class: werewolf 
 #	upgrade_character("slash")
 #	upgrade_character("howl")
-#	upgrade_character("homing missiles")
+	# upgrade_character("homing missiles")
 #	upgrade_character("laser eyes")
 #	upgrade_character("disease cloud")
-	upgrade_character("orbit thing")
-	upgrade_character("regenerate")
-	upgrade_character("rage mode")
+#	upgrade_character("orbit thing")
+#	upgrade_character("regenerate")
+#	upgrade_character("rage mode")
+#	connect("leveled_up",Callable(self,"test"))
+
 	upgrade_character("increase move speed");
-	current_health = current_health / 2
+	# activate_ragemode = true
+	current_health = maxhealth * 0.5
+	experience_gain(20)
+	
 	
 	
 func attack_state():
 	animation.play("Attack")
+	
 func running_state():
 	animation.play("Run")
-
 
 func hurt_state():
 	if current_health <= 0:
@@ -222,35 +200,13 @@ func hurt_state():
 		animation.play("Hurt")
 		await animation.animation_finished
 		state = IDLE
-		if not activate_ragemode and current_health <= max_health/2 and collected_upgrades.has("rage mode"):
-			print('in rage mode!')
+		if not activate_ragemode and current_health <= maxhealth/2 and collected_upgrades.has("rage mode"):
 			activate_ragemode = true
 		
 func idle_state():	
 	animation.play("Idle")
 func walk_state():
 	animation.play("Walk")
-	
-	
-	
-	"""
-	
-	each skill we acquire will have a base damage and any bonus damages calculated
-	
-	handle passive skills inside the player script:
-		ex: debuffs or bonuses
-			ex: rage, weaken
-			
-			if rage:
-				close_combat.dmg += close_combat.dmg * rage_bonus 
-			
-			if weakened:
-				close_combat.dmg -= close_combat.dmg * weaken bonus 
-				
-			this way, we can box our abilities' attributes and box our player's attributes
-				
-	
-	"""
 	
 func _process(delta):
 		_handle_user_input()
@@ -260,8 +216,8 @@ func _process(delta):
 		if move_direction != Vector2.ZERO:
 			last_move_direction = move_direction.normalized()
 		velocity =  move_direction * move_speed * delta	
-		_set_face_direction(move_direction)		
-		
+		_set_face_direction(move_direction)
+				
 func _physics_process(delta):
 		move_and_slide()
 
@@ -272,51 +228,34 @@ func _set_face_direction(direction:Vector2):
 	var scale_x = sign(direction.x)
 	if scale_x != 0:
 		transform2D.scale.x = scale_x
-
-"""
-if enemy not nearby, detect a random position
-this looks like a feature better suited for ranged attack 
-
-[] migrate to ranged attack script if so 
-
-is this function only for ranged attacks??? 
-
-
-
-"""
-
-"""
-
-what is an upgrade? items, abilities, passive abilities, stat increase 
-
-"""
-
+	
+# [ ]  it's functional 
+	# [x] healing
+	# [x] obtaining upgrades 
+	# [ ] upgrading abilities 
+	
 func upgrade_character(upgrade):
+	
+	print('upgrade: ',upgrade)
+	
 	"""
 	- if character does not have the selected upgrade, select it for the first time
 		- add to collected_upgrades list, start the attack timer 
 	- else, just power it up 
 	"""
 	
-	if collected_upgrades.has(upgrade):
+	if upgrade == 'heal':
+		healing(10)
+	# TODO LIST: upgrade abilities 
+	elif collected_upgrades.has(upgrade):
 		print('upgrading:' ,upgrade)
-#		print("has ",upgrade)
 		match upgrade:
 			"slash":
 				pass
-#			"ranged_attack":
-##				ranged_attack.upgrade()
-#				pass
-#			"close_combat":
-#				pass
-##				close_combat.upgrade() # <- do we want do it like this???? 
-#			"life_steal":
-#				life_steal_recovery += 1
 	else:	
 		collected_upgrades.append(upgrade)
 		print('you have obtained ability: ', upgrade)
 		match upgrade:
-
 			#  ============================ OFFENSE ABILITIES ============================
 			"slash":
 				slash = preload("res://TestScene3/Scenes/Abilities/CloseCombat.tscn").instantiate()
@@ -352,83 +291,102 @@ func upgrade_character(upgrade):
 				regenerate_timer.wait_time = regenerate_rate
 				regenerate_timer.start()
 			"rage mode":
-				ragemode_attackspeed_bonus = 0.1	
+				ragemode_attackspeed_bonus = 0.1
 				ragemode_damage_bonus = 3
 			# =========================== STAT BONUSES =========================================
 			"increase move speed":
 				move_speed_bonus = 0.1
 				modify_move_speed(move_speed_bonus)
 			"increase max health":
-				max_health_bonus = 3
-				modify_max_health(max_health_bonus)
-			# ============================ ITEM ================================================
-			"instant heal":
-				current_health += 10
-
-func calculate_experience_gain(gem_experience):
+				modify_maxhealth(1)
+			# ============================ ITEMS ================================================
+			
+#[x] gain experience 
+# we can gain exp after collecting exp gems 
+func experience_gain(gem_experience):
+	print('gem_experience: ',gem_experience)
 	current_exp += gem_experience
-	while current_exp >= exp_cap:
+	print('current_exp:', current_exp)
+	while current_exp >= max_exp:
 		"""
-		we will just upgrade 1 skill right now. in the future, this will 
-		randomly choose from list of upgrades
+		too lazy to set up gui and graphics. 
+		current code selects random upgrade and uses that as a way for player to select upgrade 
 		"""
-		upgrade_character(upgrade_choice.pick_random())
-#		upgrade_character("ranged_attack")
-		current_exp -= exp_cap
-
-
+		# upgrade_character(upgrade_choice.pick_random())
+		current_exp -= max_exp
+		emit_signal('leveled_up')
+	print('current_exp:', current_exp)
+	
+	
+# we can take damage 
 func _on_hurt_box_hurt(damage):
 	current_health -= damage 
-	print(current_health)
 	state = HURT
-#	state = HURT
-#	if current_health <= 0:
-#		print("has died")
-# add undetected enemies 
-#func _on_detection_area_area_entered(area):
-#	if not detected_enemies.has(area):
-#		detected_enemies.append(area)
-## if enemy is undetected, remove detected enemy 
-#func _on_detection_area_area_exited(area):
-#	if detected_enemies.has(area):
-#		detected_enemies.erase(area)
-#func _dash():
-	
-#check what area is: coin, item, gem? 
-# if gem, gain current_exp 
-func _on_collection_area_area_entered(area):
-	match area.item_name:
-		"gem":
-			calculate_experience_gain(area.current_exp)
 
-
-# as long as an enemy is hit and sends a "hit" signal, trigger this function 
+# we can trigger an enemy signal and perform player functions 
+	# eg: life steal g
 func enemy_hit():
 	if randi() % 100 + 1 < lifesteal_probability * 100:
 		healing(lifesteal_heal)
-	
+
+# we can heal	
 func healing(value):
-	print('healing amount: ')
-	print(value)
-	if current_health >= max_health:
-		print('at full current_health')
-		current_health = max_health
+	print('current health:',current_health)
+	if current_health >= maxhealth:
+		current_health = maxhealth
 	else:
-		if current_health > max_health * 0.5:
-			print('off rage mode')
+		if current_health > maxhealth * 0.5:
 			activate_ragemode = false
 			print(activate_ragemode)
-		print('current_health:',current_health) 
 		current_health += value
-		
-func set_state(state):
-	state = state
-
+	
+# regenerate over time 
 func regenerate_timer_timeout():
 	healing(regenerate_heal)
-
+	
+# apply move speed bonus 
 func modify_move_speed(bonus):
 	move_speed = move_speed + (move_speed * bonus)
 
-func modify_max_health(bonus):
-	max_health = max_health + max_health_bonus
+# apply max health bonus 
+func modify_maxhealth(bonus):
+	if current_health == maxhealth:
+		maxhealth += maxhealth + bonus
+		current_health = maxhealth
+	else:
+		maxhealth += maxhealth + bonus
+
+
+"""
+enum {
+	IDLE,
+	WALK,
+	DEATH,
+	RUNNING,
+	HURT,
+	ATTACK,
+	LEVEL_UP
+}
+"""
+func get_state_string():
+	var state_string = ''
+	match state:
+			IDLE:
+				state_string = 'IDLE'
+			WALK:
+				state_string = 'WALK'
+			DEATH:
+				state_string = 'DEATH'
+			RUNNING:
+				state_string = 'RUNNING'
+			HURT:
+				state_string = 'HURT'
+			ATTACK:
+				state_string = 'ATTACK'
+			LEVEL_UP:
+				state_string = 'LEVEL_UP'
+	return state_string
+#
+#func test():
+#	print('leveld up')		
+	

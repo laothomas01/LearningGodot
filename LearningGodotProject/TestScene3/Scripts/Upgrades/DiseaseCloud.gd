@@ -13,7 +13,7 @@ func _process(delta):
 func _on_timer_timeout():
 #	pass
 	var damage_area = preload("res://TestScene3/Scenes/Abilities/DamageArea.tscn").instantiate()
-	damage_area.set_lifespan(2)
+	damage_area.set_lifespan(1000)
 	damage_area.global_position = global_position
 	add_child(damage_area)
 	

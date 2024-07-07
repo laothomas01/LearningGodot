@@ -7,7 +7,6 @@ var damage = 0
 
 func _ready():
 	lifespan_timer.wait_time = lifespan_duration 
-	print(lifespan_timer.wait_time)
 	lifespan_timer.start()
 
 func _process(delta):
@@ -17,4 +16,5 @@ func _on_lifespan_timeout():
 	queue_free()
 
 func _on_area_entered(area):
-	pass
+	if area.get_parent().has_method("hurt"):
+		area.get_parent().hurt(damage)

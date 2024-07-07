@@ -1,12 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://c1ixoqwlw8myi"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://TestScene3/Scenes/LaserBeam.gd" id="1_1ihyr"]
+[ext_resource type="Script" path="res://TestScene3/Scripts/Upgrades/Utility/LaserBeam.gd" id="1_amvsc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_33rha"]
 size = Vector2(64, 12)
 
 [node name="LaserBeam" type="Area2D"]
-script = ExtResource("1_1ihyr")
+collision_layer = 4
+collision_mask = 8
+script = ExtResource("1_amvsc")
 
 [node name="Lifespan" type="Timer" parent="."]
 

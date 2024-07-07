@@ -8,6 +8,7 @@ var target = null
 var lifespan = 1
 @onready var timer = get_node("Lifespan")
 @onready var detection_area = get_node("DetectionAreaHitbox")
+
 enum 
 {
 	NORMAL,
@@ -20,9 +21,7 @@ enum
 var type : int = NORMAL
 
 func _ready():
-	
-	#testing purposes 
-	type = HOMING
+	print(type)
 	if type == HOMING:
 		detection_area.process_mode = Node.PROCESS_MODE_PAUSABLE
 	timer.start()
@@ -37,19 +36,33 @@ func _process(delta):
 """
 where to handle projectile behavior upon collision 
 """
+
+
+"""
+current solution:
+	- preventing multiple collisions when there exists overlapping area 2D 
+	- for singular collisions
+	- will need to apply to to EVERY projectile used for hit detection 
+"""
+var has_hit = false
 func _on_area_entered(area):
-	# if type if piercing and piercing charges == 0: remove projectile from memory 
-	if type == PIERCING:
-		if piercing_charges:
-			piercing_charges -= 1
-		else:
-			queue_free()
+	if has_hit:
+		return
+	if area.get_parent().has_method("hurt"):
+		area.get_parent().hurt(damage)
+		has_hit = true
+		queue_free()
 	
 func set_type(type_name):
 	match type_name:
 		"HOMING":
 			type = HOMING
-		
+func set_damage(dmg):
+	damage = dmg 
+func set_pos(position):
+	global_position = position
+func set_speed(speed):
+	move_speed = speed	
 #	match bullet_type:
 #		Type.EXPLOSIVE:
 #			var explosion = preload("res://TestScene3/Scenes/ExplosionArea.tscn").instantiate()

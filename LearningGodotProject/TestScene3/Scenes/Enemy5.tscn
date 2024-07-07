@@ -1,6 +1,6 @@
-[gd_scene load_steps=51 format=3 uid="uid://iut3mcwy8mi5"]
+[gd_scene load_steps=51 format=3]
 
-[ext_resource type="Script" path="res://TestScene3/Scenes/Enemies/BigSlimeBoss.gd" id="1_835bh"]
+[ext_resource type="Script" path="res://TestScene3/Scripts/Enemies/BigSlimeBoss.gd" id="1_835bh"]
 [ext_resource type="Texture2D" uid="uid://857ix1m1uvg7" path="res://TestScene3/Art/Enemy/Slime/SlimeAnimations/Blue/Attack/png/SlimeBlue_Attack1.png" id="2_gdeni"]
 [ext_resource type="Texture2D" uid="uid://c328yp2edr8bg" path="res://TestScene3/Art/Enemy/Slime/SlimeAnimations/Blue/Attack/png/SlimeBlue_Attack2.png" id="3_pfoti"]
 [ext_resource type="Texture2D" uid="uid://b1n7yexfu7j2" path="res://TestScene3/Art/Enemy/Slime/SlimeAnimations/Blue/Attack/png/SlimeBlue_Attack3.png" id="4_phttl"]

@@ -1,6 +1,6 @@
-[gd_scene load_steps=42 format=3 uid="uid://b5tbyulmcjpja"]
+[gd_scene load_steps=42 format=3 uid="uid://bhhi8ho24mktu"]
 
-[ext_resource type="Script" path="res://TestScene3/Scenes/Enemies/BasicSlime.gd" id="1_11e1n"]
+[ext_resource type="Script" path="res://TestScene3/Scripts/Enemies/BasicSlime.gd" id="1_wf8eo"]
 [ext_resource type="Script" path="res://TestScene3/Scripts/HitBox.gd" id="2_pv6it"]
 [ext_resource type="Script" path="res://TestScene3/Scripts/HurtBox.gd" id="3_vwvvf"]
 [ext_resource type="Texture2D" uid="uid://857ix1m1uvg7" path="res://TestScene3/Art/Enemy/Slime/SlimeAnimations/Blue/Attack/png/SlimeBlue_Attack1.png" id="4_1edny"]
@@ -37,9 +37,6 @@
 [ext_resource type="Texture2D" uid="uid://d5ct3waohuye" path="res://TestScene3/Art/Enemy/Slime/SlimeAnimations/Blue/Jump/png/SlimeBlue_Jump3.png" id="35_taubf"]
 [ext_resource type="Texture2D" uid="uid://ba0yiptbxxg35" path="res://TestScene3/Art/Enemy/Slime/SlimeAnimations/Blue/Jump/png/SlimeBlue_Jump14.png" id="36_cs4gy"]
 [ext_resource type="Texture2D" uid="uid://blm0pj45qaqx7" path="res://TestScene3/Art/Enemy/Slime/SlimeAnimations/Blue/Jump/png/SlimeBlue_Jump4.png" id="37_eh7fy"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tuamg"]
-size = Vector2(18.5, 11.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i42rn"]
 size = Vector2(18, 12)
@@ -172,15 +169,15 @@ animations = [{
 "speed": 7.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tuamg"]
+size = Vector2(18.5, 11.5)
+
 [node name="Enemy" type="CharacterBody2D"]
 top_level = true
 collision_layer = 0
 collision_mask = 0
-script = ExtResource("1_11e1n")
-maxhealth = 10000.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_tuamg")
+script = ExtResource("1_wf8eo")
+movement_speed = 5000
 
 [node name="HitBox" type="Area2D" parent="."]
 collision_layer = 0
@@ -191,6 +188,7 @@ script = ExtResource("2_pv6it")
 shape = SubResource("RectangleShape2D_i42rn")
 
 [node name="HurtBox" type="Area2D" parent="."]
+process_mode = 1
 collision_layer = 8
 collision_mask = 4
 script = ExtResource("3_vwvvf")
@@ -207,6 +205,9 @@ wait_time = 0.5
 position = Vector2(-0.4, -14.9)
 sprite_frames = SubResource("SpriteFrames_cp06f")
 animation = &"Death"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_tuamg")
 
 [connection signal="area_entered" from="HurtBox" to="HurtBox" method="_on_area_entered"]
 [connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]

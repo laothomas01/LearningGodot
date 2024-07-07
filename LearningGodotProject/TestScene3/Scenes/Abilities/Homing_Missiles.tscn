@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cktmxche0aquf"]
+[gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://TestScene3/Scenes/Abilities/Homing_Missiles.gd" id="1_nroid"]
+[ext_resource type="Script" path="res://TestScene3/Scripts/Upgrades/Homing_Missiles.gd" id="1_nroid"]
 
 [node name="Homing_Missiles" type="Node2D"]
 script = ExtResource("1_nroid")

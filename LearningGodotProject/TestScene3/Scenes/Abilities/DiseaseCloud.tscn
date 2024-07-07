@@ -1,9 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://dluaqrndsurv3"]
+[gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://TestScene3/Scenes/Abilities/DiseaseCloud.gd" id="1_fldha"]
+[ext_resource type="Script" path="res://TestScene3/Scripts/Upgrades/DiseaseCloud.gd" id="1_aqskt"]
 
 [node name="DiseaseCloud" type="Node2D"]
-script = ExtResource("1_fldha")
+script = ExtResource("1_aqskt")
 
 [node name="Timer" type="Timer" parent="."]
 
